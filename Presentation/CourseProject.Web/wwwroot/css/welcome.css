@@ -1,0 +1,75 @@
+﻿/* welcome.css */
+
+/* Общий стиль для страницы */
+body {
+    font-family: "Comic Sans MS", cursive; /* Ужасный шрифт */
+    margin: 0;
+    padding: 0;
+    background: repeating-linear-gradient(45deg, red, yellow, lime, cyan, magenta, red 10px); /* Пестрый фон */
+    color: #ff00ff; /* Ядовито-розовый текст */
+    text-shadow: 2px 2px 5px #000000; /* Тень, от которой рябит в глазах */
+}
+
+/* Контейнер приветствия */
+.welcome-container {
+    text-align: left; /* Убираем красивую центрированность */
+    padding: 100px 50px;
+    max-width: none; /* Убираем ограничение ширины */
+    margin: 20px;
+    background: url('https://i.imgur.com/7U4YxA3.png'); /* Странный фон */
+    border: 10px dashed #ff0000; /* Красная пунктирная рамка */
+    border-radius: 0; /* Убираем скругления */
+    box-shadow: 0 0 30px #00ff00; /* Зелёная сияющая тень */
+    transform: skewX(-10deg); /* Перекос контейнера */
+}
+
+/* Заголовок приветствия */
+.welcome-header h1 {
+    font-size: 4rem; /* Огромный шрифт */
+    color: #ff4500; /* Оранжевый цвет */
+    margin-bottom: 50px; /* Огромный отступ */
+    animation: spin 2s infinite linear; /* Анимация вращения текста */
+}
+
+/* Контент приветствия */
+.welcome-content p {
+    font-size: 1.5rem; /* Слишком большой шрифт */
+    margin-bottom: 50px; /* Непропорционально большой отступ */
+    line-height: 2.5; /* Огромный межстрочный интервал */
+    color: #0000ff; /* Насыщенный синий цвет */
+    letter-spacing: 3px; /* Разреженные буквы */
+    background: #ff0; /* Ярко-жёлтый фон текста */
+    padding: 10px;
+    border: 3px dotted #00ff00; /* Зелёные точки вокруг текста */
+}
+
+/* Кнопка приветствия */
+.welcome-button {
+    display: inline-block;
+    padding: 20px 40px; /* Огромные отступы */
+    font-size: 2rem; /* Большой текст */
+    color: #0000ff; /* Синий текст */
+    background-color: #ff69b4; /* Ярко-розовый фон */
+    text-decoration: underline wavy #00ff00; /* Зелёное волнистое подчёркивание */
+    border-radius: 50%; /* Полностью закруглённая кнопка */
+    box-shadow: 5px 5px 20px #ff4500; /* Оранжевая тень */
+    transform: rotate(10deg); /* Поворот */
+    transition: transform 0.1s, background-color 0.1s; /* Быстрая анимация */
+}
+
+    .welcome-button:hover {
+        background-color: #00ff00; /* Зелёный фон при наведении */
+        color: #ff0000; /* Красный текст */
+        transform: scale(1.5) rotate(-15deg); /* Увеличение и поворот */
+    }
+
+/* Анимация вращения */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

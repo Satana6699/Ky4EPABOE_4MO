@@ -25,5 +25,27 @@ public class EmployeeRepository(AppDbContext dbContext) : IEmployeeRepository
     public void Update(Employee entity) => _dbContext.Employees.Update(entity);
 
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
+
+    public async Task<int> CountAsync(string? name)
+    {
+        var employees = await _dbContext.Employees.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            employees = employees.Where(s => s.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        return employees.Count();
+    }
+
+    public async Task<IEnumerable<Employee>> GetPageAsync(int page, int pageSize, string? name)
+    {
+        var employees = await _dbContext.Employees.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            employees = employees.Where(s => s.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return employees.Skip((page - 1) * pageSize)
+            .Take(pageSize);
+    }
 }
 

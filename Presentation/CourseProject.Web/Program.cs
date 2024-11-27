@@ -2,48 +2,64 @@ using AutoMapper;
 using CourseProject.Application;
 using CourseProject.Web.Extensions;
 using CourseProject.Application.Requests.Queries;
+using CourseProject.Application.RequestHandlers.QueryHandlers;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-
-builder.Services.ConfigureCors();
-
-builder.Services.ConfigureDbContext(builder.Configuration);
-builder.Services.ConfigureServices();
-
-var mappingConfig = new MapperConfiguration(mc =>
+namespace CourseProject.Web
 {
-    mc.AddProfile(new MappingProfile());
-});
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-IMapper autoMapper = mappingConfig.CreateMapper();
-builder.Services.AddSingleton(autoMapper);
+            builder.Services.AddControllers();
 
-builder.Services.AddMediatR(cfg => 
-    cfg.RegisterServicesFromAssembly(typeof(GetEmployeesQuery).Assembly));
+            builder.Services.ConfigureCors();
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureDbContext(builder.Configuration);
 
-var app = builder.Build();
+            builder.Services.ConfigureServices();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper autoMapper = mappingConfig.CreateMapper();
+            builder.Services.AddSingleton(autoMapper);
+
+            builder.Services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(typeof(GetEmployeesQuery).Assembly));
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddRazorPages().AddRazorOptions(options =>
+            {
+                options.PageViewLocationFormats.Add("/Pages/Shared/{0}.cshtml");
+            });
+            builder.Services.AddScoped<DbInitialazer>();
+            var app = builder.Build();
+            app.UseStaticFiles();
+            await app.UseDatabaseSeeder();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
+
+            app.UseRouting();
+
+            app.MapControllers();
+
+            app.MapRazorPages();
+
+            app.MapGet("/", () => Results.Redirect("/Home/Home"));
+            app.MapFallbackToPage("/Home/Home");
+            app.Run();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseCors("CorsPolicy");
-
-app.UseRouting();
-
-app.MapControllers();
-
-app.Run();
-

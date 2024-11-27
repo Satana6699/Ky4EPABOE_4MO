@@ -18,11 +18,17 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? name = null)
     {
-        var employees = await _mediator.Send(new GetEmployeesQuery());
+        if (page < 1 || pageSize < 1)
+        {
+            return BadRequest("Page and pageSize must be greater than zero.");
+        }
 
-        return Ok(employees);
+        var query = new GetEmployeesQuery(page, pageSize, name);
+        var result = await _mediator.Send(query);
+
+        return Ok(result);
     }
 
     [HttpGet("{id}")]

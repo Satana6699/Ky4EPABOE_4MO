@@ -1,0 +1,20 @@
+﻿@page
+@{
+    Layout = "~/Pages/Home/_Layout.cshtml";
+    ViewData["Title"] = "Список сотрудников";
+}
+<div id="filter-container">
+    <label for="filter-name">Имя сотрудника:</label>
+    <input type="text" id="filter-name" oninput="nameFilter()">
+</div>
+<div id="table-container">
+</div>
+<div id="modal-container" class="modal">
+    <div class="modal-content">
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+<script rel="stylesheet" src="~/js/employees/get.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/employees/edit.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/employees/create.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/employees/info.js" asp-append-version="true"></script>
