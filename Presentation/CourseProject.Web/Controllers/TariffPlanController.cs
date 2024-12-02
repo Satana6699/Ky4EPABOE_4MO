@@ -3,10 +3,12 @@
 using CourseProject.Application.Dtos;
 using CourseProject.Application.Requests.Queries;
 using CourseProject.Application.Requests.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseProject.Web.Controllers;
 
 [Route("api/tariffPlans")]
+[Authorize]
 [ApiController]
 public class TariffPlanController : ControllerBase
 {
@@ -18,9 +20,9 @@ public class TariffPlanController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? name = null)
     {
-        var tariffPlans = await _mediator.Send(new GetTariffPlansQuery());
+        var tariffPlans = await _mediator.Send(new GetTariffPlansQuery(page, pageSize, name));
 
         return Ok(tariffPlans);
     }
@@ -39,6 +41,7 @@ public class TariffPlanController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Create([FromBody] TariffPlanForCreationDto? tariffPlan)
     {
         if (tariffPlan is null)
@@ -52,6 +55,7 @@ public class TariffPlanController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] TariffPlanForUpdateDto? tariffPlan)
     {
         if (tariffPlan is null)
@@ -70,6 +74,7 @@ public class TariffPlanController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var isEntityFound = await _mediator.Send(new DeleteTariffPlanCommand(id));

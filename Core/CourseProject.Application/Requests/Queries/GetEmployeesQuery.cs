@@ -12,7 +12,7 @@ public record GetEmployeesQuery : IRequest<PageTable<EmployeeDto>>
     public GetEmployeesQuery(int page, int pageSize, string? name)
     {
         Page = page;
-        PageSize = pageSize;
+        PageSize = pageSize; 
         Name = name;
     }
 }

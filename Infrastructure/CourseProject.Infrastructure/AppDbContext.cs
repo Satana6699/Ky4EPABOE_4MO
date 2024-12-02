@@ -10,5 +10,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 	public DbSet<TariffPlan> TariffPlans { get; set; }
 	public DbSet<ServiceContract> ServiceContracts { get; set; }
 	public DbSet<ServiceStatistic> ServiceStatistics { get; set; }
+	public DbSet<User> Users { get; set; }
 }
 

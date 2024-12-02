@@ -1,0 +1,23 @@
+﻿@page
+@{
+    Layout = "~/Pages/Home/_Layout.cshtml";
+    ViewData["Title"] = "Список";
+}
+<div id="filter-container">
+    <label for="filter-name">Фильтр по имени:</label>
+    <input type="text" id="filter-name" oninput="applyFilters()">
+</div>
+<div id="table-container">
+    <!-- Данные будут загружены сюда через JS -->
+</div>
+<div id="modal" class="modal-info">
+    <div class="modal-info-content">
+        <!--Здесь будет содержимое для отображения подробностей -->
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+<script rel="stylesheet" src="~/js/subscribers/get.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/subscribers/edit.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/subscribers/create.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/subscribers/info.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/crud.js" asp-append-version="true"></script>

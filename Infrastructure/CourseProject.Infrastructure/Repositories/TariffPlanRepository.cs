@@ -25,5 +25,26 @@ public class TariffPlanRepository(AppDbContext dbContext) : ITariffPlanRepositor
     public void Update(TariffPlan entity) => _dbContext.TariffPlans.Update(entity);
 
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
+    public async Task<int> CountAsync(string? name)
+    {
+        var entities = await _dbContext.TariffPlans.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        return entities.Count();
+    }
+
+    public async Task<IEnumerable<TariffPlan>> GetPageAsync(int page, int pageSize, string? name)
+    {
+        var entities = await _dbContext.TariffPlans.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return entities.Skip((page - 1) * pageSize)
+            .Take(pageSize);
+    }
 }
 

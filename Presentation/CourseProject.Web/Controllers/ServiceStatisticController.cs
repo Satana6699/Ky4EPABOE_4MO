@@ -3,10 +3,12 @@
 using CourseProject.Application.Dtos;
 using CourseProject.Application.Requests.Queries;
 using CourseProject.Application.Requests.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseProject.Web.Controllers;
 
 [Route("api/serviceStatistics")]
+[Authorize]
 [ApiController]
 public class ServiceStatisticController : ControllerBase
 {
@@ -18,9 +20,9 @@ public class ServiceStatisticController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? name = null)
     {
-        var serviceStatistics = await _mediator.Send(new GetServiceStatisticsQuery());
+        var serviceStatistics = await _mediator.Send(new GetServiceStatisticsQuery(page, pageSize, name));
 
         return Ok(serviceStatistics);
     }
@@ -39,6 +41,7 @@ public class ServiceStatisticController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Create([FromBody] ServiceStatisticForCreationDto? serviceStatistic)
     {
         if (serviceStatistic is null)
@@ -52,6 +55,7 @@ public class ServiceStatisticController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] ServiceStatisticForUpdateDto? serviceStatistic)
     {
         if (serviceStatistic is null)
@@ -70,6 +74,7 @@ public class ServiceStatisticController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var isEntityFound = await _mediator.Send(new DeleteServiceStatisticCommand(id));

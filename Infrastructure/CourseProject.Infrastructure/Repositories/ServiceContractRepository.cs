@@ -25,5 +25,26 @@ public class ServiceContractRepository(AppDbContext dbContext) : IServiceContrac
     public void Update(ServiceContract entity) => _dbContext.ServiceContracts.Update(entity);
 
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
+    public async Task<int> CountAsync(string? name)
+    {
+        var entities = await _dbContext.ServiceContracts.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        return entities.Count();
+    }
+
+    public async Task<IEnumerable<ServiceContract>> GetPageAsync(int page, int pageSize, string? name)
+    {
+        var entities = await _dbContext.ServiceContracts.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return entities.Skip((page - 1) * pageSize)
+            .Take(pageSize);
+    }
 }
 

@@ -10,5 +10,7 @@ public interface IServiceContractRepository
     void Delete(ServiceContract entity);
     void Update(ServiceContract entity);
     Task SaveChanges();
+    Task<int> CountAsync(string? name);
+    Task<IEnumerable<ServiceContract>> GetPageAsync(int page, int pageSize, string? name);
 }
 

@@ -25,5 +25,26 @@ public class SubscriberRepository(AppDbContext dbContext) : ISubscriberRepositor
     public void Update(Subscriber entity) => _dbContext.Subscribers.Update(entity);
 
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
+    public async Task<int> CountAsync(string? name)
+    {
+        var entities = await _dbContext.Subscribers.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        return entities.Count();
+    }
+
+    public async Task<IEnumerable<Subscriber>> GetPageAsync(int page, int pageSize, string? name)
+    {
+        var entities = await _dbContext.Subscribers.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return entities.Skip((page - 1) * pageSize)
+            .Take(pageSize);
+    }
 }
 

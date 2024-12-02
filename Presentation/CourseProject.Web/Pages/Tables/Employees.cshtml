@@ -4,13 +4,15 @@
     ViewData["Title"] = "Список сотрудников";
 }
 <div id="filter-container">
-    <label for="filter-name">Имя сотрудника:</label>
-    <input type="text" id="filter-name" oninput="nameFilter()">
+    <label for="filter-name">Фильтр по имени:</label>
+    <input type="text" id="filter-name" oninput="applyFilters()">
 </div>
 <div id="table-container">
+    <!-- Данные будут загружены сюда через JS -->
 </div>
-<div id="modal-container" class="modal">
-    <div class="modal-content">
+<div id="modal" class="modal-info">
+    <div class="modal-info-content">
+        <!--Здесь будет содержимое для отображения подробностей -->
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
@@ -18,3 +20,4 @@
 <script rel="stylesheet" src="~/js/employees/edit.js" asp-append-version="true"></script>
 <script rel="stylesheet" src="~/js/employees/create.js" asp-append-version="true"></script>
 <script rel="stylesheet" src="~/js/employees/info.js" asp-append-version="true"></script>
+<script rel="stylesheet" src="~/js/crud.js" asp-append-version="true"></script>

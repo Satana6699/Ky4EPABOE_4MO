@@ -6,7 +6,7 @@ using CourseProject.Application.Requests.Queries;
 
 namespace CourseProject.Application.RequestHandlers.QueryHandlers;
 
-public class GetSubscribersQueryHandler : IRequestHandler<GetSubscribersQuery, IEnumerable<SubscriberDto>>
+public class GetSubscribersQueryHandler : IRequestHandler<GetSubscribersQuery, PageTable<SubscriberDto>>
 {
 	private readonly ISubscriberRepository _repository;
 	private readonly IMapper _mapper;
@@ -17,6 +17,12 @@ public class GetSubscribersQueryHandler : IRequestHandler<GetSubscribersQuery, I
 		_mapper = mapper;
 	}
 
-	public async Task<IEnumerable<SubscriberDto>> Handle(GetSubscribersQuery request, CancellationToken cancellationToken) => 
-		_mapper.Map<IEnumerable<SubscriberDto>>(await _repository.Get(trackChanges: false));
+	public async Task<PageTable<SubscriberDto>> Handle(GetSubscribersQuery request, CancellationToken cancellationToken)
+    {
+        var totalCount = await _repository.CountAsync(request.Name);
+        var subscribers = await _repository.GetPageAsync(request.Page, request.PageSize, request.Name);
+
+        var items = _mapper.Map<IEnumerable<SubscriberDto>>(subscribers);
+        return new PageTable<SubscriberDto>(items, totalCount, request.Page, request.PageSize);
+    }
 }

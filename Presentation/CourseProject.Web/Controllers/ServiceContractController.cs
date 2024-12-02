@@ -3,10 +3,12 @@
 using CourseProject.Application.Dtos;
 using CourseProject.Application.Requests.Queries;
 using CourseProject.Application.Requests.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseProject.Web.Controllers;
 
 [Route("api/serviceContracts")]
+[Authorize]
 [ApiController]
 public class ServiceContractController : ControllerBase
 {
@@ -18,9 +20,9 @@ public class ServiceContractController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? name = null)
     {
-        var serviceContracts = await _mediator.Send(new GetServiceContractsQuery());
+        var serviceContracts = await _mediator.Send(new GetServiceContractsQuery(page, pageSize, name));
 
         return Ok(serviceContracts);
     }
@@ -39,6 +41,7 @@ public class ServiceContractController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Create([FromBody] ServiceContractForCreationDto? serviceContract)
     {
         if (serviceContract is null)
@@ -52,6 +55,7 @@ public class ServiceContractController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] ServiceContractForUpdateDto? serviceContract)
     {
         if (serviceContract is null)
@@ -70,6 +74,7 @@ public class ServiceContractController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var isEntityFound = await _mediator.Send(new DeleteServiceContractCommand(id));

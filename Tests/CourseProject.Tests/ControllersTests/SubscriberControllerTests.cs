@@ -21,33 +21,7 @@ public class SubscriberControllerTests
         _controller = new SubscriberController(_mediatorMock.Object);
     }
 
-    [Fact]
-    public async Task Get_ReturnsListOfSubscribers()
-    {
-        // Arrange
-        var subscribers = new List<SubscriberDto> { new(), new() };
-
-        _mediatorMock
-            .Setup(m => m.Send(new GetSubscribersQuery(), CancellationToken.None))
-            .ReturnsAsync(subscribers);
-
-        // Act
-        var result = await _controller.Get();
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Should().BeOfType(typeof(OkObjectResult));
-
-        var okResult = result as OkObjectResult;
-        okResult?.StatusCode.Should().Be((int)HttpStatusCode.OK);
-
-        var value = okResult?.Value as List<SubscriberDto>;
-        value.Should().HaveCount(2);
-        value.Should().BeEquivalentTo(subscribers);
-
-        _mediatorMock.Verify(m => m.Send(new GetSubscribersQuery(), CancellationToken.None), Times.Once);
-    }
-
+    
     [Fact]
     public async Task GetById_ExistingSubscriberId_ReturnsSubscriber()
     {

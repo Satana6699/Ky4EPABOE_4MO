@@ -1,0 +1,102 @@
+﻿.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(45deg, #ff7f7f, #7f7fff);
+    font-family: Comic Sans MS, sans-serif;
+    color: #fff;
+    text-align: center;
+}
+
+    .auth-container h1 {
+        font-size: 3rem;
+        text-shadow: 2px 2px 4px #000;
+        margin-bottom: 2rem;
+    }
+
+form#authForm {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px 5px #ff7f7f;
+    width: 300px;
+}
+
+    form#authForm label {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+        text-shadow: 1px 1px 2px #000;
+    }
+
+    form#authForm input {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        border: 2px solid #7f7fff;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.7);
+        color: #000;
+    }
+
+        form#authForm input:focus {
+            outline: none;
+            border-color: #ff7f7f;
+            background: #ffe5e5;
+        }
+
+    form#authForm button {
+        width: 100%;
+        padding: 0.8rem;
+        background: #7f7fff;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        form#authForm button:hover {
+            background: #ff7f7f;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px 2px #ff7f7f;
+        }
+
+        form#authForm button:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 5px 1px #7f7fff;
+        }
+
+    form#authForm p.error {
+        font-size: 1rem;
+        color: #ff4444;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px #000;
+    }
+
+@keyframes rainbowBorder {
+    0% {
+        border-color: #ff7f7f;
+    }
+
+    33% {
+        border-color: #7fff7f;
+    }
+
+    66% {
+        border-color: #7f7fff;
+    }
+
+    100% {
+        border-color: #ff7f7f;
+    }
+}
+
+form#authForm input:focus,
+form#authForm button:hover {
+    animation: rainbowBorder 1.5s infinite;
+}

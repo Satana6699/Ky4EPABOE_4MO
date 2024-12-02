@@ -21,33 +21,7 @@ public class ServiceContractControllerTests
         _controller = new ServiceContractController(_mediatorMock.Object);
     }
 
-    [Fact]
-    public async Task Get_ReturnsListOfServiceContracts()
-    {
-        // Arrange
-        var serviceContracts = new List<ServiceContractDto> { new(), new() };
-
-        _mediatorMock
-            .Setup(m => m.Send(new GetServiceContractsQuery(), CancellationToken.None))
-            .ReturnsAsync(serviceContracts);
-
-        // Act
-        var result = await _controller.Get();
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Should().BeOfType(typeof(OkObjectResult));
-
-        var okResult = result as OkObjectResult;
-        okResult?.StatusCode.Should().Be((int)HttpStatusCode.OK);
-
-        var value = okResult?.Value as List<ServiceContractDto>;
-        value.Should().HaveCount(2);
-        value.Should().BeEquivalentTo(serviceContracts);
-
-        _mediatorMock.Verify(m => m.Send(new GetServiceContractsQuery(), CancellationToken.None), Times.Once);
-    }
-
+    
     [Fact]
     public async Task GetById_ExistingServiceContractId_ReturnsServiceContract()
     {

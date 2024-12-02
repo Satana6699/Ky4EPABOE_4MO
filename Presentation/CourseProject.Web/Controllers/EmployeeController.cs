@@ -3,10 +3,12 @@
 using CourseProject.Application.Dtos;
 using CourseProject.Application.Requests.Queries;
 using CourseProject.Application.Requests.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseProject.Web.Controllers;
 
 [Route("api/employees")]
+[Authorize]
 [ApiController]
 public class EmployeeController : ControllerBase
 {
@@ -45,6 +47,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Create([FromBody] EmployeeForCreationDto? employee)
     {
         if (employee is null)
@@ -58,6 +61,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] EmployeeForUpdateDto? employee)
     {
         if (employee is null)
@@ -76,6 +80,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var isEntityFound = await _mediator.Send(new DeleteEmployeeCommand(id));

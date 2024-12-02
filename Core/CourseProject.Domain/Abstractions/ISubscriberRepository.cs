@@ -10,5 +10,7 @@ public interface ISubscriberRepository
     void Delete(Subscriber entity);
     void Update(Subscriber entity);
     Task SaveChanges();
+    Task<int> CountAsync(string? name);
+    Task<IEnumerable<Subscriber>> GetPageAsync(int page, int pageSize, string? name);
 }
 

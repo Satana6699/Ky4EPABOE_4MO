@@ -10,5 +10,7 @@ public interface ITariffPlanRepository
     void Delete(TariffPlan entity);
     void Update(TariffPlan entity);
     Task SaveChanges();
+    Task<int> CountAsync(string? name);
+    Task<IEnumerable<TariffPlan>> GetPageAsync(int page, int pageSize, string? name);
 }
 

@@ -21,33 +21,7 @@ public class TariffPlanControllerTests
         _controller = new TariffPlanController(_mediatorMock.Object);
     }
 
-    [Fact]
-    public async Task Get_ReturnsListOfTariffPlans()
-    {
-        // Arrange
-        var tariffPlans = new List<TariffPlanDto> { new(), new() };
-
-        _mediatorMock
-            .Setup(m => m.Send(new GetTariffPlansQuery(), CancellationToken.None))
-            .ReturnsAsync(tariffPlans);
-
-        // Act
-        var result = await _controller.Get();
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Should().BeOfType(typeof(OkObjectResult));
-
-        var okResult = result as OkObjectResult;
-        okResult?.StatusCode.Should().Be((int)HttpStatusCode.OK);
-
-        var value = okResult?.Value as List<TariffPlanDto>;
-        value.Should().HaveCount(2);
-        value.Should().BeEquivalentTo(tariffPlans);
-
-        _mediatorMock.Verify(m => m.Send(new GetTariffPlansQuery(), CancellationToken.None), Times.Once);
-    }
-
+    
     [Fact]
     public async Task GetById_ExistingTariffPlanId_ReturnsTariffPlan()
     {

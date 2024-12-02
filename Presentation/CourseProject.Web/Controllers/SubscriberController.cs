@@ -3,10 +3,12 @@
 using CourseProject.Application.Dtos;
 using CourseProject.Application.Requests.Queries;
 using CourseProject.Application.Requests.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseProject.Web.Controllers;
 
 [Route("api/subscribers")]
+[Authorize]
 [ApiController]
 public class SubscriberController : ControllerBase
 {
@@ -18,9 +20,9 @@ public class SubscriberController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? name = null)
     {
-        var subscribers = await _mediator.Send(new GetSubscribersQuery());
+        var subscribers = await _mediator.Send(new GetSubscribersQuery(page, pageSize, name));
 
         return Ok(subscribers);
     }
@@ -39,6 +41,7 @@ public class SubscriberController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Create([FromBody] SubscriberForCreationDto? subscriber)
     {
         if (subscriber is null)
@@ -52,6 +55,7 @@ public class SubscriberController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] SubscriberForUpdateDto? subscriber)
     {
         if (subscriber is null)
@@ -70,6 +74,7 @@ public class SubscriberController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var isEntityFound = await _mediator.Send(new DeleteSubscriberCommand(id));

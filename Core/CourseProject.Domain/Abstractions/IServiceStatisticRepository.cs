@@ -10,5 +10,7 @@ public interface IServiceStatisticRepository
     void Delete(ServiceStatistic entity);
     void Update(ServiceStatistic entity);
     Task SaveChanges();
+    Task<int> CountAsync(string? name);
+    Task<IEnumerable<ServiceStatistic>> GetPageAsync(int page, int pageSize, string? name);
 }
 

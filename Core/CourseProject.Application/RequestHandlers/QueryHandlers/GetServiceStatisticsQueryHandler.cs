@@ -6,7 +6,7 @@ using CourseProject.Application.Requests.Queries;
 
 namespace CourseProject.Application.RequestHandlers.QueryHandlers;
 
-public class GetServiceStatisticsQueryHandler : IRequestHandler<GetServiceStatisticsQuery, IEnumerable<ServiceStatisticDto>>
+public class GetServiceStatisticsQueryHandler : IRequestHandler<GetServiceStatisticsQuery, PageTable<ServiceStatisticDto>>
 {
 	private readonly IServiceStatisticRepository _repository;
 	private readonly IMapper _mapper;
@@ -17,6 +17,12 @@ public class GetServiceStatisticsQueryHandler : IRequestHandler<GetServiceStatis
 		_mapper = mapper;
 	}
 
-	public async Task<IEnumerable<ServiceStatisticDto>> Handle(GetServiceStatisticsQuery request, CancellationToken cancellationToken) => 
-		_mapper.Map<IEnumerable<ServiceStatisticDto>>(await _repository.Get(trackChanges: false));
+	public async Task<PageTable<ServiceStatisticDto>> Handle(GetServiceStatisticsQuery request, CancellationToken cancellationToken)
+    {
+        var totalCount = await _repository.CountAsync(request.Name);
+        var serviceStatistics = await _repository.GetPageAsync(request.Page, request.PageSize, request.Name);
+
+        var items = _mapper.Map<IEnumerable<ServiceStatisticDto>>(serviceStatistics);
+        return new PageTable<ServiceStatisticDto>(items, totalCount, request.Page, request.PageSize);
+    }
 }

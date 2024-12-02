@@ -1,5 +1,6 @@
 ﻿using CourseProject.Domain.Entities;
 using CourseProject.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseProject.Web
 {
@@ -18,6 +19,36 @@ namespace CourseProject.Web
             if (db.TariffPlans.Any())
             {
                 return;
+            }
+            if (!db.Users.Any())
+            {
+                // Создаём объект пользователя
+                var admin = new User
+                {
+                    UserName = "admin",
+                    Name = "admin",
+                    HashedPassword = BCrypt.Net.BCrypt.HashPassword("admin"),
+                    Role = "admin"
+                };
+                await db.Users.AddAsync(admin);
+
+                List<User> users = new List<User>();
+                for (int i = 0; i < 100; i++)
+                {
+                    var hashedPassword = BCrypt.Net.BCrypt.HashPassword("user_" + i);
+                    // Создаём объект пользователя
+                    var user = new User
+                    {
+                        UserName = "user_" + i,
+                        Name = "user_" + i,
+                        HashedPassword = hashedPassword,
+                        Role = "user"
+                    };
+                    users.Add(user);
+                }
+                await db.Users.AddRangeAsync(users);
+
+                await db.SaveChangesAsync();
             }
 
             // Initialize data for TariffPlans

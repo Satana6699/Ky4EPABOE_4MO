@@ -25,5 +25,26 @@ public class ServiceStatisticRepository(AppDbContext dbContext) : IServiceStatis
     public void Update(ServiceStatistic entity) => _dbContext.ServiceStatistics.Update(entity);
 
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
+    public async Task<int> CountAsync(string? name)
+    {
+        var entities = await _dbContext.ServiceStatistics.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.ServiceContract.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        return entities.Count();
+    }
+
+    public async Task<IEnumerable<ServiceStatistic>> GetPageAsync(int page, int pageSize, string? name)
+    {
+        var entities = await _dbContext.ServiceStatistics.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            entities = entities.Where(s => s.ServiceContract.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return entities.Skip((page - 1) * pageSize)
+            .Take(pageSize);
+    }
 }
 
