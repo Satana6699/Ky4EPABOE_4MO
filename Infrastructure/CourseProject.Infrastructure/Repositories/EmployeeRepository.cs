@@ -10,10 +10,18 @@ public class EmployeeRepository(AppDbContext dbContext) : IEmployeeRepository
 
     public async Task Create(Employee entity) => await _dbContext.Employees.AddAsync(entity);
 
-    public async Task<IEnumerable<Employee>> Get(bool trackChanges) =>
-        await (!trackChanges 
-            ? _dbContext.Employees.AsNoTracking() 
-            : _dbContext.Employees).ToListAsync();
+    public async Task<IEnumerable<Employee>> Get(bool trackChanges, string? name)
+    {
+        var items = await (!trackChanges
+                ? _dbContext.Employees.OrderBy(d => d.Id).AsNoTracking()
+                : _dbContext.Employees.OrderBy(d => d.Id)).ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            items = items.Where(s => s.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return items;
+    }
 
     public async Task<Employee?> GetById(Guid id, bool trackChanges) =>
         await (!trackChanges ?

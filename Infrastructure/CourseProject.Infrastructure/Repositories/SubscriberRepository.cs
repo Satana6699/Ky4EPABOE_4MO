@@ -10,10 +10,18 @@ public class SubscriberRepository(AppDbContext dbContext) : ISubscriberRepositor
 
     public async Task Create(Subscriber entity) => await _dbContext.Subscribers.AddAsync(entity);
 
-    public async Task<IEnumerable<Subscriber>> Get(bool trackChanges) =>
-        await (!trackChanges 
-            ? _dbContext.Subscribers.AsNoTracking() 
-            : _dbContext.Subscribers).ToListAsync();
+    public async Task<IEnumerable<Subscriber>> Get(bool trackChanges, string? name)
+    {
+        var items = await (!trackChanges
+                ? _dbContext.Subscribers.OrderBy(d => d.Id).AsNoTracking()
+                : _dbContext.Subscribers.OrderBy(d => d.Id)).ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            items = items.Where(s => s.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return items;
+    }
 
     public async Task<Subscriber?> GetById(Guid id, bool trackChanges) =>
         await (!trackChanges ?

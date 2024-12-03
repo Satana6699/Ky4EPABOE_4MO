@@ -1,0 +1,28 @@
+﻿.modal-list {
+    position: absolute; /*Позиционирование относительно ячейки */
+    z-index: 1000;
+    width: 300px; /*Ограничиваем ширину */
+    max-height: 300px; /*Ограничиваем высоту окна */
+    background-color: white; /*Белый фон */
+    border: 2px solid #888; /*Граница окна */
+    border-radius: 10px; /*Скругленные углы */
+    overflow-y: scroll;
+}
+
+.modal-list-content {
+    height: 100%; /* Заполняет все доступное пространство */
+    overflow-y: auto; /* Добавляем вертикальный скролл, если содержимое выходит за пределы */
+    padding: 10px;
+}
+
+.modal-list-header {
+    /* Стили для шапки модального окна, если необходимо */
+    background-color: #f1f1f1;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.modal-list-body {
+    /* Основной контейнер для содержимого */
+    padding-top: 10px;
+}

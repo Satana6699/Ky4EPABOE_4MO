@@ -2,14 +2,22 @@
     const row = editButton.closest('tr');
     const cells = Array.from(row.querySelectorAll('td')).filter(cell => !cell.classList.contains('actions'));
     const isEditing = row.classList.contains('editing');
+    const cell = document.querySelector('td[date-str]');
+    const dateStr = cell.getAttribute('date-str');
+
 
     if (isEditing) {
         // Сохранение изменений
         const id = row.dataset.id;
+        const newdate = new Date(dateStr);
+        newdate.setHours(newdate.getHours() + 3);
         const updatedData = {
             id: id,
-            diseaseId: cells[0].dataset.diseaseId, // Это ID болезни
-            symptomId: cells[1].dataset.symptomId // Это ID симптома
+            tariffPlanName: cells[0].innerText.trim(),
+            employeeId: cells[1].dataset.employeeId,
+            subscriberId: cells[2].dataset.subscriberId,
+            phoneNumber: cells[3].innerText.trim(),
+            contractDate: newdate,
         };
 
         saveChanges(id, updatedData, row);
@@ -19,10 +27,17 @@
         row.dataset.originalData = JSON.stringify(cells.map(cell => cell.innerText.trim()));
 
         cells.forEach(cell => {
-            if (cell.dataset.field === "disease" || cell.dataset.field === "symptom") {
+            if (cell.dataset.field === "employee" || cell.dataset.field === "subscriber") {
                 cell.addEventListener('click', () => openSelectModal(cell));
             }
         });
+        cells[4].innerHTML = `<input type="datetime-local" id="datetime" name="datetime" value="${dateStr}"/>`;
+        cells.forEach(cell => cell.setAttribute('contenteditable', 'true')); // Только данные можно редактировать
+        const datetimeInput = document.querySelector('#datetime');
+        datetimeInput.addEventListener('change', (event) => {
+            cell.setAttribute('date-str', new Date(event.target.value).toISOString());
+        });
+
 
         editButton.innerHTML = '<i class="bi bi-check-circle-fill"></i>';
         editButton.title = "Save";
@@ -48,9 +63,8 @@ async function saveChanges(id, updatedData, row) {
         row.classList.remove('editing');
         const cells = Array.from(row.querySelectorAll('td')).filter(cell => !cell.classList.contains('actions'));
 
-        // Обновляем данные в строке
-        cells[0].innerText = response.data.disease.name;
-        cells[1].innerText = response.data.symptom.name;
+        location.reload();
+
         // Отключаем возможность редактирования (клик по ячейкам)
         cells.forEach(cell => {
             cell.removeEventListener('click', openSelectModal);  // Убираем обработчик события
@@ -94,9 +108,10 @@ function cancelEditingDiseaseSymptom(row) {
     cells.forEach(cell => {
         cell.removeEventListener('click', openSelectModal);  // Убираем обработчик события
     });
+    cancelEditing(row);
 }
 function openSelectModal(cell) {
-    const type = cell.dataset.field === "disease" ? 'disease' : 'symptom';
+    const type = cell.dataset.field === "employee" ? 'employee' : 'subscriber';
 
     // Удаляем все открытые модальные окна, если они есть
     const existingModal = document.querySelector('.modal-list');
@@ -147,7 +162,7 @@ async function loadSelectData(type, cell) {
         response.data.forEach(item => {
             const row = document.createElement('tr');
             row.dataset.id = item.id;
-            row.innerHTML = `<td>${item.name}</td>`;
+            row.innerHTML = `<td>${item.fullName}</td>`;
             row.onclick = () => selectItem(item, cell, type);
             table.appendChild(row);
         });
@@ -158,14 +173,18 @@ async function loadSelectData(type, cell) {
     }
 }
 function selectItem(item, cell, type) {
-    if (type === 'disease') {
-        cell.dataset.diseaseId = item.id;
-        cell.innerText = item.name;
-    } else if (type === 'symptom') {
-        cell.dataset.symptomId = item.id;
-        cell.innerText = item.name;
+    if (type === 'employee') {
+        cell.dataset.employeeId = item.id;
+        cell.innerText = item.fullName;
+    } else if (type === 'subscriber') {
+        cell.dataset.subscriberId = item.id;
+        cell.innerText = item.fullName;
     }
 
     const modal = document.querySelector('.modal-list');
     if (modal) modal.remove();
+}
+
+function handleDateChange(event) {
+    cell.setAttribute('date-str', Date(event.target.value).toISOString());
 }

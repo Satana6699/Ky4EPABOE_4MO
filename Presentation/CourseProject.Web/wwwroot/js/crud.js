@@ -146,16 +146,24 @@ function closeModal() {
     modal.style.display = "none";
 }
 
-function ERROR(error){
-    if (typeof error.response.status !== "undefined" && error.response.status === 401) {
-        alert('Сначала требуется пройти авторизацию.');
-        // Если код состояния 401, перенаправляем на страницу авторизации
-        window.location.href = '/Home/Auth';
-        return;
+function ERROR(error) {
+    if (error.response && error.response.status) {
+        if (typeof error.response.status !== "undefined" && error.response.status === 401) {
+            alert('Сначала требуется пройти авторизацию.');
+            // Если код состояния 401, перенаправляем на страницу авторизации
+            window.location.href = '/Home/Auth';
+            return;
+        }
+        console.error("Error fetching symptoms:", error);
+        document.getElementById("table-container").innerHTML =
+            `<p>Error loading symptoms. Please try again later.</p>`;
     }
-    console.error("Error fetching symptoms:", error);
-    document.getElementById("table-container").innerHTML =
-        `<p>Error loading symptoms. Please try again later.</p>`;
+    else {
+        console.error('Response is undefined or missing status.');
+        console.error("Error fetching symptoms:", error);
+        document.getElementById("table-container").innerHTML =
+            `<p>Error loading symptoms. Please try again later.</p>`;
+    }
 }
 function cancelEditing(row) {
     const cells = row.querySelectorAll('td[contenteditable]');

@@ -70,7 +70,7 @@ public class ServiceContractController : ControllerBase
             return NotFound($"ServiceContract with id {id} is not found.");
         }
 
-        return NoContent();
+        return Ok(serviceContract);
     }
 
     [HttpDelete("{id}")]
@@ -85,5 +85,20 @@ public class ServiceContractController : ControllerBase
         }
 
         return NoContent();
+    }
+
+    [HttpGet("employees")]
+    public async Task<IActionResult> GetEmployees([FromQuery] string? name = null)
+    {
+        var result = await _mediator.Send(new GetEmployeesAllQuery(name));
+
+        return Ok(result);
+    }
+    [HttpGet("subscribers")]
+    public async Task<IActionResult> GetSubscribers([FromQuery] string? name = null)
+    {
+        var result = await _mediator.Send(new GetSubscribersAllQuery(name));
+
+        return Ok(result);
     }
 }

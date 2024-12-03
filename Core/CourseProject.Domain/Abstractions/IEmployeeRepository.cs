@@ -4,7 +4,7 @@ namespace CourseProject.Domain.Abstractions;
 
 public interface IEmployeeRepository
 {
-	Task<IEnumerable<Employee>> Get(bool trackChanges);
+	Task<IEnumerable<Employee>> Get(bool trackChanges, string? name);
 	Task<Employee?> GetById(Guid id, bool trackChanges);
     Task Create(Employee entity);
     void Delete(Employee entity);

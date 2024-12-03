@@ -4,7 +4,7 @@ namespace CourseProject.Domain.Abstractions;
 
 public interface ISubscriberRepository 
 {
-	Task<IEnumerable<Subscriber>> Get(bool trackChanges);
+	Task<IEnumerable<Subscriber>> Get(bool trackChanges, string? name);
 	Task<Subscriber?> GetById(Guid id, bool trackChanges);
     Task Create(Subscriber entity);
     void Delete(Subscriber entity);

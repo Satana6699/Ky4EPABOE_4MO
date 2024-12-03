@@ -1,6 +1,6 @@
 ﻿async function info(deleteButton) {
     const row = deleteButton.closest('tr');
-    const symptom = await axios.get("/api/diseaseSymptoms/" + row.dataset.id, {
+    const item = await axios.get(apiBaseUrl + "/" + row.dataset.id, {
         headers:
         {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -10,12 +10,12 @@
     const modalContent = modal.querySelector(".modal-info-content");
 
     modalContent.innerHTML = `
-        <h3>Детали болезни и симптома</h3>
-        <p><strong>Болезнь:</strong> ${symptom.data.disease.name}</p>
-        <p><strong>Продолжительность болезни:</strong> ${symptom.data.disease.duration}</p>
-        <p><strong>Симптом:</strong> ${symptom.data.disease.symptoms}</p>
-        <p><strong>Последствия:</strong> ${symptom.data.disease.consequences}</p>
-        <p><strong>Симптом:</strong> ${symptom.data.symptom.name}</p>
+        <h3>Детальная информация</h3>
+        <p><strong>Название тарифа:</strong> ${item.data.tariffPlanName}</p>
+        <p><strong>Имя сотрудника:</strong> ${item.data.employee.fullName}</p>
+        <p><strong>Имя абонента:</strong> ${item.data.subscriber.fullName}</p>
+        <p><strong>Номер телефона:</strong> ${item.data.phoneNumber}</p>
+        <p><strong>Дата контракта:</strong> ${item.data.contractDate}</p>
         <button onclick=\"closeModal()\">Close</button>
         <button onclick=\"deleteRow('${row.dataset.id}')\">Delete</button>
     `;

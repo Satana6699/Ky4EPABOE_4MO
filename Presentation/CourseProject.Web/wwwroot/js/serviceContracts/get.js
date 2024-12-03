@@ -4,25 +4,24 @@ const itemsPerPage = 10; // Количество записей на стран�
 
 async function loadData(page = 1) {
     try {
-        const diseaseFilter = document.getElementById("filter-disease").value || "";
-        const symptomFilter = document.getElementById("filter-symptom").value || "";
+        const nameFilter = document.getElementById("filter-name").value || "";
+        const token = localStorage.getItem('token');
 
         const response = await axios.get(`${apiBaseUrl}`, {
             params: {
                 page: page,
                 pageSize: itemsPerPage,
-                nameDisease: diseaseFilter,
-                nameSymptom: symptomFilter,
+                name: nameFilter,
             },
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: `Bearer ${token}`,
             },
         });
 
         // Создание переменных для таблицы
         const itemsLength = response.data.items.length;
         const totalCount = response.data.totalCount;
-        const tableTitle = "Болезни и симптомы";
+        const tableTitle = "Сервисные контракты";
         const tableHead = `
                 <tr>
                 <th>Название тарифа</th>
@@ -35,11 +34,11 @@ async function loadData(page = 1) {
         `;
         const tableBody = response.data.items.map(item => `
         <tr data-id="${item.id}">
-            <td data-field="symptom" data-symptom-id="${item.symptom.id}">${item.tariffPlanName}</td>
-            <td data-field="disease" data-disease-id="${item.disease.id}">${item.employee.fullName}</td>
-            <td data-field="symptom" data-symptom-id="${item.symptom.id}">${item.subscriber.fullName}</td>
-            <td data-field="symptom" data-symptom-id="${item.symptom.id}">${item.phoneNumber}</td>
-            <td data-field="symptom" data-symptom-id="${item.symptom.id}">${item.contractDate}</td>
+            <td contenteditable="false">${item.tariffPlanName}</td>
+            <td data-field="employee" data-employee-id="${item.employee.id}">${item.employee.fullName}</td>
+            <td data-field="subscriber" data-subscriber-id="${item.subscriber.id}">${item.subscriber.fullName}</td>
+            <td contenteditable="false">${item.phoneNumber}</td>
+            <td contenteditable="false" date-str="${item.contractDate}">${formatISODate(item.contractDate)}</td>
             <td class="actions">
                 <a href="javascript:void(0);" onclick="editRow(this)" title="Edit">
                     <i class="bi bi-pencil-fill"></i>
@@ -56,6 +55,22 @@ async function loadData(page = 1) {
     } catch (error) {
         ERROR(error);
     }
+}
+
+function formatISODate(isoDate) {
+    const date = new Date(isoDate);
+
+    // Опции для форматирования
+    const options = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+
+    // Форматирование даты
+    return date.toLocaleString('ru-RU', options);
 }
 
 // Инициализация

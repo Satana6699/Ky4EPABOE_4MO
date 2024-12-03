@@ -58,21 +58,7 @@ async function saveNewRow(saveButton) {
         if (response.status === 201) {
             alert("Symptom created successfully!");
 
-            //// Обновляем строку с новыми данными
-            //row.dataset.id = response.data.id; // Устанавливаем ID, полученный от сервера
-            //row.innerHTML = `
-            //<td data-field="disease" data-disease-id="${response.dataset.id}">${item.disease.name}</td>
-            //<td data-field="symptom" data-symptom-id="${response.dataset.id}">${item.symptom.name}</td>
-            //    <td style="padding: 8px;">
-            //        <a href="javascript:void(0);" onclick="editRow(this)" title="Edit">
-            //            <i class="bi bi-pencil-fill"></i>
-            //        </a>
-            //        <a href="javascript:void(0);" onclick="info(this)" title="Delete Item">
-            //            <i class="bi bi-eye-fill"></i>
-            //        </a>
-            //    </td>
-            //`;
-
+            
             location.reload();
 
         } else {

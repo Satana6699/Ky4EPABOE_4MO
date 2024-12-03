@@ -14,7 +14,9 @@ namespace CourseProject.Web
         }
         public async Task InitializeAsync()
         {
-            await db.Database.MigrateAsync();
+            db.Database.EnsureCreated();
+
+            //await db.Database.MigrateAsync();
 
             if (db.TariffPlans.Any())
             {
