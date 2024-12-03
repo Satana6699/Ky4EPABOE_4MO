@@ -2,8 +2,8 @@
     const row = editButton.closest('tr');
     const cells = Array.from(row.querySelectorAll('td')).filter(cell => !cell.classList.contains('actions'));
     const isEditing = row.classList.contains('editing');
-    const cell = document.querySelector('td[date-str]');
-    const dateStr = cell.getAttribute('date-str');
+    //const cell = document.querySelector('td[date-str]');
+    const dateStr = cells[4].getAttribute('date-str');
 
 
     if (isEditing) {
@@ -35,7 +35,7 @@
         cells.forEach(cell => cell.setAttribute('contenteditable', 'true')); // Только данные можно редактировать
         const datetimeInput = document.querySelector('#datetime');
         datetimeInput.addEventListener('change', (event) => {
-            cell.setAttribute('date-str', new Date(event.target.value).toISOString());
+            cells[4].setAttribute('date-str', new Date(event.target.value).toISOString());
         });
 
 
