@@ -27,7 +27,7 @@ public class ServiceStatisticRepository(AppDbContext dbContext) : IServiceStatis
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
     public async Task<int> CountAsync(string? name)
     {
-        var entities = await _dbContext.ServiceStatistics.ToListAsync();
+        var entities = await _dbContext.ServiceStatistics.Include(e => e.ServiceContract).ToListAsync();
         if (!string.IsNullOrWhiteSpace(name))
         {
             entities = entities.Where(s => s.ServiceContract.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -37,7 +37,8 @@ public class ServiceStatisticRepository(AppDbContext dbContext) : IServiceStatis
 
     public async Task<IEnumerable<ServiceStatistic>> GetPageAsync(int page, int pageSize, string? name)
     {
-        var entities = await _dbContext.ServiceStatistics.ToListAsync();
+        var entities = await _dbContext.ServiceStatistics.Include(e => e.ServiceContract).
+            Include(e => e.ServiceContract.Subscriber).Include(e => e.ServiceContract.Employee).ToListAsync();
         if (!string.IsNullOrWhiteSpace(name))
         {
             entities = entities.Where(s => s.ServiceContract.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();

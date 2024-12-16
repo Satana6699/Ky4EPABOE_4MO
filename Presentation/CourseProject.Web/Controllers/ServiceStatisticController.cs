@@ -86,4 +86,13 @@ public class ServiceStatisticController : ControllerBase
 
         return NoContent();
     }
+
+    
+    [HttpGet("serviceContracts")]
+    public async Task<IActionResult> GetSubscribers([FromQuery] string? name = null)
+    {
+        var result = await _mediator.Send(new GetServiceContractsAllQuery());
+
+        return Ok(result);
+    }
 }
