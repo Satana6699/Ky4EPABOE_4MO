@@ -30,7 +30,7 @@ public class ServiceStatisticRepository(AppDbContext dbContext) : IServiceStatis
         var entities = await _dbContext.ServiceStatistics.Include(e => e.ServiceContract).Include(e => e.ServiceContract.Employee).ToListAsync();
         if (!string.IsNullOrWhiteSpace(name))
         {
-            entities = entities.Where(s => s.ServiceContract.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+            entities = entities.Where(s => s.ServiceContract.TariffPlanName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
         }
         return entities.Count();
     }
@@ -41,7 +41,7 @@ public class ServiceStatisticRepository(AppDbContext dbContext) : IServiceStatis
             Include(e => e.ServiceContract.Subscriber).Include(e => e.ServiceContract.Employee).ToListAsync();
         if (!string.IsNullOrWhiteSpace(name))
         {
-            entities = entities.Where(s => s.ServiceContract.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+            entities = entities.Where(s => s.ServiceContract.TariffPlanName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         return entities.Skip((page - 1) * pageSize)
