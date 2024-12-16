@@ -27,7 +27,7 @@ public class ServiceStatisticRepository(AppDbContext dbContext) : IServiceStatis
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
     public async Task<int> CountAsync(string? name)
     {
-        var entities = await _dbContext.ServiceStatistics.Include(e => e.ServiceContract).ToListAsync();
+        var entities = await _dbContext.ServiceStatistics.Include(e => e.ServiceContract).Include(e => e.ServiceContract.Employee).ToListAsync();
         if (!string.IsNullOrWhiteSpace(name))
         {
             entities = entities.Where(s => s.ServiceContract.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();

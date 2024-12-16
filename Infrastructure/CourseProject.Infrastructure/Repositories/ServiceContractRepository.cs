@@ -27,7 +27,7 @@ public class ServiceContractRepository(AppDbContext dbContext) : IServiceContrac
     public async Task SaveChanges() => await _dbContext.SaveChangesAsync();
     public async Task<int> CountAsync(string? name)
     {
-        var entities = await _dbContext.ServiceContracts.ToListAsync();
+        var entities = await _dbContext.ServiceContracts.Include(e => e.Employee).ToListAsync();
         if (!string.IsNullOrWhiteSpace(name))
         {
             entities = entities.Where(s => s.Employee.FullName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
