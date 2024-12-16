@@ -40,7 +40,7 @@ async function loadData(page = 1) {
             <td contenteditable="false">${item.phoneNumber}</td>
             <td contenteditable="false" date-str="${item.contractDate}">${formatISODate(item.contractDate)}</td>
             <td class="actions">
-                <a href="javascript:void(0);" onclick="editRow(this)" title="Edit">
+                <a class="edit-buttons" href="javascript:void(0);" onclick="editRow(this)" title="Edit">
                     <i class="bi bi-pencil-fill"></i>
                 </a>
                 <a href="javascript:void(0);" onclick="info(this)" title="Delete Item">

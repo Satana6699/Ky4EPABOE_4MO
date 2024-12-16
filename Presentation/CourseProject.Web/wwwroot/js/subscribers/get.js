@@ -20,7 +20,7 @@ async function loadData(page = 1) {
         // Создание переменных для таблицы
         const itemsLength = response.data.items.length;
         const totalCount = response.data.totalCount;
-        const tableTitle = "Симптомы";
+        const tableTitle = "Пользователи";
         const tableHead = `
             <tr>
                 <th>Имя</th>

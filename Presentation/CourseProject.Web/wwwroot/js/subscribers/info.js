@@ -18,7 +18,7 @@
 
     modal.style.display = "block";
     const editButtons = document.querySelectorAll('.edit-buttons');
-    if (localStorage.getItem('role') === 'Admin') {
+    if (localStorage.getItem('role') === 'admin') {
         // Показать все кнопки редактирования
         editButtons.forEach(button => {
             button.style.display = 'inline-block';
